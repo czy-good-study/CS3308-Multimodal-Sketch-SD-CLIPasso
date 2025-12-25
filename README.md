@@ -1,10 +1,19 @@
-# Multimodal Task: Stable Diffusion Prior for Stroke-Controlled Sketch Generation
+# Multimodal Task: Implementing Sketch Generation Using Pre-trained Models
 
-This project implements a robust text-to-sketch generation pipeline that leverages **Stable Diffusion** as a semantic prior and **CLIPasso** (CLIP-based differentiable rasterization) for stroke optimization.
+This project implements a training-free sketch generation method that leverages **Stable Diffusion** and **CLIP** to achieve fine-grained control over the generation process, focusing on stroke-level abstraction and semantic consistency.
 
-## Overview
+## Core Objective
+To design and implement a method that uses pre-trained models to generate freehand sketches without any additional training on sketch data, achieving precise controllability over the generation process.
 
-Unlike standard CLIPasso which optimizes strokes directly from a text prompt (often leading to abstract or unstable results), this method first generates a high-quality, structure-aware image using Stable Diffusion, and then uses this image as a geometric target for the sketch optimization.
+## Controllability Features
+This implementation focuses on **Stroke-Controlled Text-to-Sketch** [13][14], allowing explicit control over sketch complexity:
+
+- **Stroke Count Control (`--num_strokes`)**: Explicitly determines the abstraction level by limiting the number of vector strokes used to represent the subject.
+- **Semantic Control (`--prompt`)**: Uses Stable Diffusion as a prior to ensure the sketch aligns with the text description's semantic meaning and structure.
+- **Style Control**: Through Stable Diffusion prompts, we can influence the style of the underlying structure before stroke optimization.
+
+## Method Overview
+Our approach combines **Stable Diffusion** as a strong semantic prior with **CLIPasso**'s differentiable rasterization optimization:
 
 **Pipeline:**
 1.  **Text-to-Image:** Generate a reference image using Stable Diffusion (v1.5) with specific style prompts to encourage clean contours.
@@ -16,9 +25,10 @@ Unlike standard CLIPasso which optimizes strokes directly from a text prompt (of
 
 - **Stable Diffusion Prior:** Uses SD to "imagine" the object first, ensuring better anatomy and composition.
 - **Controllability:**
-    - `num_strokes`: Control the abstraction level.
-    - `prompt`: Text description of the object.
-    - `seed`: Reproducible results.
+    - **Abstraction Level:** Explicitly control the number of strokes (`--num_strokes`).
+    - **Content & Style:** Controlled by the text prompt and Stable Diffusion style suffix.
+    - **Structure:** Guided by the Stable Diffusion prior, ensuring better anatomy than pure CLIP-based methods.
+    - **Reproducibility:** Fixed seeds for consistent results.
 - **Visualization:**
     - Generates `evolution.gif` to show the drawing process.
     - Plots `loss_curve.png` to analyze convergence.
