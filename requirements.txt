@@ -1,0 +1,14 @@
+torch
+torchvision
+git+https://github.com/openai/CLIP.git
+numpy
+Pillow
+tqdm
+scikit-image
+diffusers
+transformers
+accelerate
+rembg
+opencv-python
+matplotlib
+imageio
