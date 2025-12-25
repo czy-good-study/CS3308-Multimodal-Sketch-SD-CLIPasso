@@ -111,4 +111,48 @@ python SD_CLIPasso/evaluate_sketch.py --results_dir SD_CLIPasso/results
 4. **Optimization**: Backpropagate gradients to curve control points and update them.
 
 ## References
-- CLIPasso: Semantically-Aware Object Sketching (SIGGRAPH 2022)
+
+This project builds upon the following works:
+
+1.  **CLIPasso: Semantically-Aware Object Sketching** (SIGGRAPH 2022)  
+    *Yael Vinker, Ehsan Pajouheshgar, Jessica Y. Bo, Roman Christian Bachmann, Amit H. Bermano, Daniel Cohen-Or, Amir Zamir, Ariel Shamir*  
+    [[Paper]](https://arxiv.org/abs/2202.05822) [[Code]](https://github.com/yael-vinker/CLIPasso)
+
+2.  **Stable Diffusion** (CVPR 2022)  
+    *Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, Björn Ommer*  
+    [[Paper]](https://arxiv.org/abs/2112.10752) [[Code]](https://github.com/CompVis/stable-diffusion)
+
+3.  **CLIP** (ICML 2021)  
+    *Alec Radford, et al.*  
+    [[Paper]](https://arxiv.org/abs/2103.00020) [[Code]](https://github.com/openai/CLIP)
+
+4.  **DiffVG** (TOG 2020)  
+    *Tzu-Mao Li, Michal Lukáč, Michaël Gharbi, Jonathan Ragan-Kelley*  
+    [[Paper]](https://people.csail.mit.edu/tzumao/diffvg/) [[Code]](https://github.com/BachiLi/diffvg)
+
+## BibTeX
+If you find this code useful or use it for your research, please cite the original papers:
+
+```bibtex
+@article{vinker2022clipasso,
+  title={CLIPasso: Semantically-Aware Object Sketching},
+  author={Vinker, Yael and Pajouheshgar, Ehsan and Bo, Jessica Y and Bachmann, Roman Christian and Bermano, Amit H and Cohen-Or, Daniel and Zamir, Amir and Shamir, Ariel},
+  journal={ACM Transactions on Graphics (TOG)},
+  volume={41},
+  number={4},
+  pages={1--11},
+  year={2022},
+  publisher={ACM New York, NY, USA}
+}
+
+@inproceedings{rombach2022high,
+  title={High-resolution image synthesis with latent diffusion models},
+  author={Rombach, Robin and Blattmann, Andreas and Lorenz, Dominik and Esser, Patrick and Ommer, Bj{\"o}rn},
+  booktitle={Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
+  pages={10684--10695},
+  year={2022}
+}
+```
+
+## Acknowledgements
+This code is developed for the CS3308 Multimodal Learning assignment.

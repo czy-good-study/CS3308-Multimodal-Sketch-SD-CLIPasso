@@ -8,6 +8,11 @@ import numpy as np
 import argparse
 import os
 import torchvision.transforms as transforms
+
+"""
+SD-CLIPasso: Stable Diffusion Prior for Stroke-Controlled Sketch Generation
+Based on CLIPasso (Vinker et al., SIGGRAPH 2022)
+"""
 import random
 import math
 import matplotlib.pyplot as plt
