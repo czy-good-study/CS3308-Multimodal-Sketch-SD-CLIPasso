@@ -38,20 +38,19 @@ Our approach combines **Stable Diffusion** as a strong semantic prior with **CLI
 
 ### Dependencies
 - Python 3.8+
-- PyTorch with CUDA support
-- [pydiffvg](https://github.com/BachiLi/diffvg) (Differentiable Vector Graphics)
+- PyTorch (CUDA recommended, CPU supported)
+- pydiffvg (Included in this repository)
 
 ### Installation
 
 1.  **Install PyTorch:**
-    Follow the [official guide](https://pytorch.org/get-started/locally/) to install PyTorch with CUDA support.
+    Follow the [official guide](https://pytorch.org/get-started/locally/) to install PyTorch.
 
 2.  **Install pydiffvg:**
     ```bash
-    git clone https://github.com/BachiLi/diffvg
     cd diffvg
-    git submodule update --init --recursive
-    python setup.py install
+    pip install .
+    cd ..
     ```
     *Note: Requires C++ compiler and CMake.*
 
@@ -62,7 +61,7 @@ Our approach combines **Stable Diffusion** as a strong semantic prior with **CLI
 
 ## Usage
 
-### 1. Run SD-CLIPasso (Main Method)
+### Run SD-CLIPasso
 
 ```bash
 python SD_CLIPasso/run_sd_clipasso.py --prompt "a drawing of a horse" --num_strokes 64 --num_iter 1000
@@ -71,16 +70,19 @@ python SD_CLIPasso/run_sd_clipasso.py --prompt "a drawing of a horse" --num_stro
 **Arguments:**
 - `--prompt`: Text description (e.g., "a cat", "a car").
 - `--num_strokes`: Number of strokes (e.g., 32 for abstract, 128 for detailed).
-- `--num_iter`: Optimization iterations (default: 1000).
+- `--num_iter`: Optimization iterations (default: 500).
 - `--seed`: Random seed.
 - `--output_dir`: Directory to save results.
+- `--exp_name`: Custom name for the output folder.
+- `--sd_style_suffix`: Style keywords appended to the SD prompt.
+- `--sd_negative_prompt`: Negative prompt for Stable Diffusion.
+- `--geometric_weight`: Weight for geometric loss (default: 1.0).
+- `--semantic_weight`: Weight for semantic loss (default: 0.1).
+- `--initial_stroke_width`: Initial width of the strokes.
+- `--early_stop_patience`: Early stopping patience (default: 50).
+- `--early_stop_threshold`: Early stopping threshold (default: 0.01).
 
-### 2. Baseline (Optional)
-The files `main.py` and `sketch.py` contain a standard CLIPasso implementation (Text-to-Sketch without SD) for comparison.
 
-```bash
-python main.py --prompt "a camel" --num_strokes 64
-```
 
 ## Results Structure
 
@@ -92,14 +94,7 @@ The output folder (e.g., `SD_CLIPasso/results/horse_...`) will contain:
 - `loss_curve.png`: Loss convergence plot.
 - `config.json`: Experiment configuration.
 
-### 3. Environment Check (Debug Mode)
-Since this project relies on large pre-trained models (Stable Diffusion + CLIP), the first run will automatically download them (several GBs). 
 
-To verify your environment (pydiffvg, torch, etc.) works *without* downloading models, use the test mode:
-
-```bash
-python SD_CLIPasso/run_sd_clipasso.py --test_env --no_clip --num_iter 100
-```
 
 ## Evaluation
 
