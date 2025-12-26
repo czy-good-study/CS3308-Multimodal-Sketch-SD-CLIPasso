@@ -44,7 +44,28 @@ Our approach combines **Stable Diffusion** as a strong semantic prior with **CLI
 
 ### Installation
 
-1.  **Install PyTorch:**
+1.  **Create Environment (Recommended):**
+    You can use either Conda or Python's built-in `venv`.
+
+    **Option A: Using venv (Standard Python)**
+    ```bash
+    # Create virtual environment
+    python -m venv sketch_env
+    
+    # Activate environment
+    # On Linux/WSL:
+    source sketch_env/bin/activate
+    # On Windows (PowerShell):
+    .\sketch_env\Scripts\Activate
+    ```
+
+    **Option B: Using Conda**
+    ```bash
+    conda create -n sketch_env python=3.10
+    conda activate sketch_env
+    ```
+
+2.  **Install PyTorch:**
     Follow the [official guide](https://pytorch.org/get-started/locally/) to install PyTorch.
 
 2.  **Install pydiffvg:**
