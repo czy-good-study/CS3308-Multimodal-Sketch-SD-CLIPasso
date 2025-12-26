@@ -65,19 +65,34 @@ Our approach combines **Stable Diffusion** as a strong semantic prior with **CLI
     conda activate sketch_env
     ```
 
-2.  **Install PyTorch:**
-    Follow the [official guide](https://pytorch.org/get-started/locally/) to install PyTorch.
+2.  **Install System Dependencies (WSL/Linux Only):**
+    You need a C++ compiler and CMake to build `diffvg`.
+    ```bash
+    sudo apt-get update
+    # 'build-essential' includes gcc/g++ compilers and make
+    sudo apt-get install -y cmake build-essential libpng-dev libjpeg-dev ffmpeg
+    ```
 
-2.  **Install pydiffvg:**
+3.  **Install PyTorch:**
+    **Crucial:** PyTorch must be installed *before* installing `diffvg`.
+    Follow the [official guide](https://pytorch.org/get-started/locally/) to install PyTorch.
+    ```bash
+    # Example for CUDA 11.8
+    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+    # Or for CPU only (if no GPU)
+    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+    ```
+
+4.  **Install pydiffvg:**
     *Note: `diffvg` is difficult to compile on native Windows. Please use WSL2 or Linux.*
     ```bash
     cd diffvg
     pip install .
     cd ..
     ```
-    *Note: Requires C++ compiler and CMake.*
+    *If you encounter errors, ensure `cmake` is installed (Step 2).*
 
-3.  **Install Python Requirements:**
+5.  **Install Python Requirements:**
     ```bash
     pip install -r requirements.txt
     ```
