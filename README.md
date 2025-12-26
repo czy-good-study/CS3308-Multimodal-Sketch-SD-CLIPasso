@@ -85,9 +85,20 @@ Our approach combines **Stable Diffusion** as a strong semantic prior with **CLI
 
 4.  **Install pydiffvg:**
     *Note: `diffvg` is difficult to compile on native Windows. Please use WSL2 or Linux.*
+
+    **Standard Installation (GPU/CUDA):**
     ```bash
     cd diffvg
     pip install .
+    cd ..
+    ```
+
+    **CPU-Only Installation:**
+    If you do not have a GPU, use this to avoid CUDA errors:
+    ```bash
+    cd diffvg
+    export DIFFVG_CUDA=0
+    pip install . --no-build-isolation
     cd ..
     ```
     *If you encounter errors, ensure `cmake` is installed (Step 2).*
