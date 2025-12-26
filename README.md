@@ -37,6 +37,7 @@ Our approach combines **Stable Diffusion** as a strong semantic prior with **CLI
 ## Prerequisites
 
 ### Dependencies
+- **OS**: Linux or Windows with WSL2 (Highly Recommended)
 - Python 3.8+
 - PyTorch (CUDA recommended, CPU supported)
 - pydiffvg (Included in this repository)
@@ -47,6 +48,7 @@ Our approach combines **Stable Diffusion** as a strong semantic prior with **CLI
     Follow the [official guide](https://pytorch.org/get-started/locally/) to install PyTorch.
 
 2.  **Install pydiffvg:**
+    *Note: `diffvg` is difficult to compile on native Windows. Please use WSL2 or Linux.*
     ```bash
     cd diffvg
     pip install .
