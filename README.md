@@ -36,3 +36,13 @@ python SD_CLIPasso/run_sd_clipasso.py --prompt "a horse" --style_library "path/t
 1. **Style Feature Extraction**:Style images are processed to extract line-based features such as `edge_density` and `line_thickness`, along with deep style features represented by Gram matrices computed from VGG19 layers. These descriptors form the style library.
 2. **Parameter Adaptation**: During generation, the chosen style’s line features are used to automatically adjust parameters like the number of strokes and initial stroke width. This allows generated sketches to visually reflect the selected style’s characteristics.
 3. **Style Loss Guiding Optimization**: The optimization incorporates style-aware loss terms, enforcing the generated strokes to reproduce style statistics consistent with the selected style. This includes Gram-style loss on VGG features and CLIP-based semantic style features. The `style_weight` parameter balances between faithful content reconstruction and stylistic adherence.
+
+## Examples
+<div style="display: flex; justify-content: space-around; align-items: center;">
+
+  <img src="./Sketch%20generated%20with%20different%20styles/style1.gif" alt="Style1" width="150" />
+
+  <img src="./Sketch%20generated%20with%20different%20styles/style2.gif" alt="Style2" width="150" />
+
+  <img src="./Sketch%20generated%20with%20different%20styles/style3.gif" alt="Style3" width="150" />
+</div>
