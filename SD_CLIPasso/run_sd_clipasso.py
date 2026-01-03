@@ -40,6 +40,15 @@ def main():
     parser.add_argument("--early_stop_patience", type=int, default=50, help="Stop if no improvement for N iterations")
     parser.add_argument("--early_stop_threshold", type=float, default=0.01, help="Minimum average pixel movement to consider as change")
 
+    parser.add_argument("--optimize_width", action="store_true", default=False, help="Enable stroke width optimization")
+
+    # 通过控制贝塞尔曲线来控制复杂度
+    parser.add_argument("--bezier_segments", type=int, default=1, 
+                    help="Number of Bezier segments per stroke (more=more flexible)") #用于控制贝塞尔曲线段数，更高的段数让一个笔画可以更加复杂
+    parser.add_argument("--bezier_length_penalty", type=float, default=0.01, 
+                    help="Penalty for Bezier curve length (encourages shorter curves)") #用于控制贝塞尔曲线的长度，值越大笔画长度越短
+    parser.add_argument("--curvature_limit", type=float, default=0.8, 
+                    help="Maximum curvature allowed for Bezier curves") #用于限制贝塞尔曲线的曲率，防止过度弯曲
 
     args = parser.parse_args()
 
@@ -237,8 +246,57 @@ def main():
     shapes = []
     shape_groups = []
     
+    #计算贝塞尔曲线正则化损失
+    def compute_bezier_regularization_loss(shapes, args):
+        total_loss = 0
+        
+        for path in shapes:
+            points = path.points
+            '''
+            #1.曲线长度惩罚（鼓励较短的曲线）
+            if args.bezier_length_penalty > 0:
+                curve_length = 0
+                for i in range(0, len(points) - 1):
+                    segment_length = torch.norm(points[i+1] - points[i])
+                    curve_length += segment_length
+                total_loss += args.bezier_length_penalty * curve_length
+            '''
+            #2.曲率限制
+            if args.curvature_limit > 0 and len(points) >= 4:
+                for i in range(0, len(points) - 3, 3):
+                    p0, p1, p2, p3 = points[i], points[i+1], points[i+2], points[i+3]
+                    
+                    # 计算贝塞尔曲线的曲率
+                    # 简化计算：使用控制点形成的角度
+                    v1 = p1 - p0
+                    v2 = p2 - p1
+                    v3 = p3 - p2
+                    
+                    if torch.norm(v1) > 0 and torch.norm(v2) > 0:
+                        v1_norm = v1 / torch.norm(v1)
+                        v2_norm = v2 / torch.norm(v2)
+                        cos_angle1 = torch.dot(v1_norm, v2_norm)
+                        cos_angle1 = torch.clamp(cos_angle1, -1.0, 1.0)
+                        angle1 = torch.acos(cos_angle1)
+                        
+                        # 如果角度太大（曲率太大），施加惩罚
+                        if angle1 > args.curvature_limit * math.pi:
+                            total_loss += 0.1 * (angle1 - args.curvature_limit * math.pi)
+                    
+                    if torch.norm(v2) > 0 and torch.norm(v3) > 0:
+                        v2_norm = v2 / torch.norm(v2)
+                        v3_norm = v3 / torch.norm(v3)
+                        cos_angle2 = torch.dot(v2_norm, v3_norm)
+                        cos_angle2 = torch.clamp(cos_angle2, -1.0, 1.0)
+                        angle2 = torch.acos(cos_angle2)
+                        
+                        if angle2 > args.curvature_limit * math.pi:
+                            total_loss += 0.1 * (angle2 - args.curvature_limit * math.pi)
+    
+        return total_loss
+
     for i in range(args.num_strokes):
-        num_segments = 1
+        num_segments = args.bezier_segments 
         num_control_points = torch.zeros(num_segments, dtype = torch.int32) + 2
         points = []
         
@@ -283,13 +341,19 @@ def main():
         path.points.requires_grad = True
         points_vars.append(path.points)
         # CLIPasso official: Stroke width is FIXED and not optimized.
-        path.stroke_width.requires_grad = False 
-        # stroke_width_vars.append(path.stroke_width)
-    
-    optimizer = torch.optim.Adam([
-        {'params': points_vars, 'lr': 1.0},
-        # {'params': stroke_width_vars, 'lr': 0.1}
-    ])
+        if args.optimize_width:
+            #启用笔画宽度优化
+            path.stroke_width.requires_grad = True 
+            stroke_width_vars.append(path.stroke_width)
+            optimizer = torch.optim.Adam([
+            {'params': points_vars, 'lr': 1.0},
+            {'params': stroke_width_vars, 'lr': 0.1}#将笔画宽度加入优化
+            ])
+        else:
+            path.stroke_width.requires_grad = False
+            optimizer = torch.optim.Adam([
+            {'params': points_vars, 'lr': 1.0},
+            ])
     
     # Augmentation settings
     num_augs = 4
@@ -370,21 +434,23 @@ def main():
             loss += (args.semantic_weight * loss_semantic + args.geometric_weight * loss_geometric)
 
         loss = loss / num_augs
-        
+        #添加贝塞尔损失
+        bezier_loss = compute_bezier_regularization_loss(shapes, args)
+        loss+=bezier_loss
         loss_history.append(loss.item())
 
         loss.backward()
         
         # Gradient clipping
         torch.nn.utils.clip_grad_norm_(points_vars, 1.0)
-        # torch.nn.utils.clip_grad_norm_(stroke_width_vars, 1.0)
+        torch.nn.utils.clip_grad_norm_(stroke_width_vars, 0.1)#设定笔画宽度优化的速度
         
         optimizer.step()
         
         # Clamp
         for path in shapes:
             path.points.data.clamp_(0, canvas_width)
-            # path.stroke_width.data.clamp_(0.5, 8.0)
+            path.stroke_width.data.clamp_(1.0, 2.0)#设定笔画宽度优化的范围
             
         # --- Early Stopping Check ---
         with torch.no_grad():
