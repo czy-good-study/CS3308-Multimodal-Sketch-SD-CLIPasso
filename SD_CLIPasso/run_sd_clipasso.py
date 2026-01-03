@@ -47,7 +47,7 @@ def main():
                     help="Number of Bezier segments per stroke (more=more flexible)") #用于控制贝塞尔曲线段数，更高的段数让一个笔画可以更加复杂
     parser.add_argument("--bezier_length_penalty", type=float, default=0.01, 
                     help="Penalty for Bezier curve length (encourages shorter curves)") #用于控制贝塞尔曲线的长度，值越大笔画长度越短
-    parser.add_argument("--curvature_limit", type=float, default=0.8, 
+    parser.add_argument("--curvature_limit", type=float, default=0.6, 
                     help="Maximum curvature allowed for Bezier curves") #用于限制贝塞尔曲线的曲率，防止过度弯曲
 
     args = parser.parse_args()
