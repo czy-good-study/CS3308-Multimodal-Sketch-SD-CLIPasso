@@ -32,4 +32,4 @@ python SD_CLIPasso/run_sd_clipasso.py --prompt "a drawing of a horse" --num_stro
 python SD_CLIPasso/run_sd_clipasso.py --prompt "a drawing of a horse" --num_strokes 128 --num_iter 1000 --initial_stroke_width 1.5
 
 # Stroke width optimization
-python SD_CLIPasso/run_sd_clipasso.py --prompt "a drawing of a horse" --num_strokes 128 --num_iter 1000 --initial_stroke_width 1.5 --optimize_width True
+python SD_CLIPasso/run_sd_clipasso.py --prompt "a drawing of a horse" --num_strokes 128 --num_iter 1000 --initial_stroke_width 1.5 --optimize_width
