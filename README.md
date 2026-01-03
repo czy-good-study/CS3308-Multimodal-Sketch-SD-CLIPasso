@@ -33,3 +33,22 @@ python SD_CLIPasso/run_sd_clipasso.py --prompt "a drawing of a horse" --num_stro
 
 # Stroke width optimization
 python SD_CLIPasso/run_sd_clipasso.py --prompt "a drawing of a horse" --num_strokes 256 --num_iter 1000 --initial_stroke_width 1.5 --optimize_width
+```
+# Evaluation Module
+
+This module provides automated evaluation metrics for generated sketches using CLIP (Contrastive Language-Image Pre-training) model. It quantifies both semantic consistency and visual fidelity of sketch generations.
+
+## How It Works
+
+The evaluation system uses CLIP's multimodal understanding to compute two key metrics:
+
+1. **Text Score (Semantic Consistency)**: Cosine similarity between sketch embeddings and text prompt embeddings
+2. **Image Score (Visual Fidelity)**: Cosine similarity between sketch embeddings and Stable Diffusion reference image embeddings
+
+Both metrics range from -1 to 1, with higher scores indicating better quality.
+
+## Usage
+
+### Basic Evaluation
+```bash
+python SD_CLIPasso/evaluate_sketch.py --results_dir SD_CLIPasso/results
