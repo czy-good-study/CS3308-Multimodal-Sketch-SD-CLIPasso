@@ -28,7 +28,7 @@ def main():
     parser.add_argument("--exp_name", type=str, default=None, help="Custom name for the output folder")
     
     # New arguments for SD control
-    parser.add_argument("--sd_style_suffix", type=str, default="realistic, full body, centered, high contrast, simple background, contours only, no blur, beautiful", help="Style to append to SD prompt")
+    parser.add_argument("--sd_style_suffix", type=str, default=", realistic, full body, centered, high contrast, simple background, contours only, no blur, beautiful", help="Style to append to SD prompt")
     parser.add_argument("--sd_negative_prompt", type=str, default="cropped, out of frame, cut off, close up, partial, shadow, contact shadow, ground, floor, wall, complex background, text, watermark, drawing, sketch, cartoon, anime, grayscale,, blur, pale, washed out, overexposed, low contrast", help="Negative prompt for SD")
     
     # New arguments for CLIPasso control

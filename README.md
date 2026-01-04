@@ -15,6 +15,8 @@ This implementation focuses on **Stroke-Controlled Text-to-Sketch** [13][14], al
 ## Method Overview
 Our approach combines **Stable Diffusion** as a strong semantic prior with **CLIPasso**'s differentiable rasterization optimization:
 
+![Concise Pipeline](pipeline_concise.png)
+
 **Pipeline:**
 1.  **Text-to-Image:** Generate a reference image using Stable Diffusion (v1.5) with specific style prompts to encourage clean contours.
 2.  **Preprocessing:** Remove background (rembg) and apply bilateral filtering to suppress texture while preserving edges.
@@ -170,6 +172,7 @@ python SD_CLIPasso/evaluate_sketch.py --results_dir SD_CLIPasso/results
 - `--output_dir`: Directory to save results.
 
 ## Method Details
+
 1. **Initialization**: Initialize `N` random Bezier curves.
 2. **Rasterization**: Use `pydiffvg` to render the curves into a 2D image.
 3. **Loss Computation**:
