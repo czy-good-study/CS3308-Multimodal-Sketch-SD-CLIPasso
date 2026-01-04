@@ -33,9 +33,9 @@ python SD_CLIPasso/run_sd_clipasso.py --prompt "a horse" --style_library "path/t
 - `--style_weight`:Controls the strength of style loss; higher values enforce stronger style adherence.
 
 ## Method Details
-1. **Style Feature Extraction**:Style images are processed to extract line-based features such as `edge_density` and `line_thickness`, along with deep style features represented by Gram matrices computed from VGG19 layers. These descriptors form the style library.
-2. **Parameter Adaptation**: During generation, the chosen style’s line features are used to automatically adjust parameters like the number of strokes and initial stroke width. This allows generated sketches to visually reflect the selected style’s characteristics.
-3. **Style Loss Guiding Optimization**: The optimization incorporates style-aware loss terms, enforcing the generated strokes to reproduce style statistics consistent with the selected style. This includes Gram-style loss on VGG features and CLIP-based semantic style features. The `style_weight` parameter balances between faithful content reconstruction and stylistic adherence.
+- **Style Feature Extraction**:Style images are processed to extract line-based features such as `edge_density` and `line_thickness`, along with deep style features represented by Gram matrices computed from VGG19 layers. These descriptors form the style library.
+- **Parameter Adaptation**: During generation, the chosen style’s line features are used to automatically adjust parameters like the number of strokes and initial stroke width. This allows generated sketches to visually reflect the selected style’s characteristics.
+- **Style Loss Guiding Optimization**: The optimization incorporates style-aware loss terms, enforcing the generated strokes to reproduce style statistics consistent with the selected style. This includes Gram-style loss on VGG features and CLIP-based semantic style features. The `style_weight` parameter balances between faithful content reconstruction and stylistic adherence.
 
 ## Examples
 <div style="display: flex; justify-content: space-around; align-items: center;">
@@ -46,3 +46,8 @@ python SD_CLIPasso/run_sd_clipasso.py --prompt "a horse" --style_library "path/t
 
   <img src="./Sketch%20generated%20with%20different%20styles/style3.gif" alt="Style3" width="150" />
 </div>
+
+## Future Work
+ - **Fine-grained disentanglement of style elements:** Current style transfer merges holistic features (e.g.,edge density, line thickness, texture) into a single style loss, lacking control over individual stylistic components. For instance, a user may want to combine the hatching texture of cross-stitch with the bold contours of comic books, or adjust the "sketchiness" of lines independently from color shading (if extended to colored sketches). Future work will decompose style into interpretable sub-components, using disentangled representation learning .This will allow users to modulate each component’s intensity via explicit controls, enabling highly personalized style combinations that are not limited to pre-defined exemplars.
+
+  - **Adaptive balance between style adherence and semantic fidelity:** The current fixed style weight $\lambda_{sty}$ may lead to trade-offs. Overemphasizing style can distort the structural coherence of the sketch , while underemphasizing style fails to capture the target aesthetic. Future work may design a context-aware weight adjustment mechanism that dynamically balances $\lambda_{sty}$ with semantic $\lambda_{sem}$ and geometric $\lambda_{geo}$ losses based on the input text prompt and target style. 
