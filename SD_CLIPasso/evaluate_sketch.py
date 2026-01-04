@@ -70,7 +70,10 @@ def main():
         prompt_guess = folder_name.replace("_", " ")
         
         svg_path = os.path.join(folder, "final.svg")
-        sd_img_path = os.path.join(folder, "sd_output.png")
+        # Try to find the SD image (sd_final.png is the processed one, sd_raw.png is the original)
+        sd_img_path = os.path.join(folder, "sd_final.png")
+        if not os.path.exists(sd_img_path):
+             sd_img_path = os.path.join(folder, "sd_raw.png")
         
         if not os.path.exists(svg_path):
             print(f"Skipping {folder}: final.svg not found")
